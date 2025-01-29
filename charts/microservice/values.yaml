@@ -1,0 +1,19 @@
+# Default values for microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This will set the replicaset count 
+# More information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+replicaCount: 2
+
+# This will set the version of the application
+# version: 1.0.0
+
+rollout:
+  strategy:
+    canary:
+      maxSurge: "100%"
+      steps:
+        - pause: {}
+        - setWeight: 50
+        - pause: {}

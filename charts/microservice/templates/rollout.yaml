@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "microservice.name" . }}
+  labels:
+    {{- include "microservice.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- with .Values.rollout.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "microservice.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "microservice.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: application
+          image: python:3.8-slim
+          command: ["/bin/sh", "-c", "pip install -r /app/requirements.txt && python3 -m flask run --host=0.0.0.0 --port=80"]
+          env:
+            - name: VERSION
+              value: {{ required "version is required" .Values.version | quote }}
+            - name: FLASK_APP
+              value: "app.py"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "32Mi"
+              cpu: "100m"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
+          workingDir: /app
+      volumes:
+        - name: app-volume
+          configMap:
+            name: {{ include "microservice.name" . }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  microservice:
+  - apiVersion: v2
+    created: "2025-01-31T14:05:20.066325975-03:00"
+    description: A Helm chart for Kubernetes
+    digest: 6736e07e56b023d4ad928acd53af0d907e0c5b456dfab98f0c1283580648b29e
+    name: microservice
+    type: application
+    urls:
+    - https://fernandosoaresjr.github.io/poc-argocd-helm/charts/microservice-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-01-31T14:05:20.06591273-03:00"
